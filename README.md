@@ -14,6 +14,6 @@ Separately, a background process (e.g., a scheduler, a dedicated service) reads 
 
 By using the Outbox event pattern, developers can achieve consistency and reliability in event-driven systems, enabling seamless integration between different components and ensuring data integrity across distributed environments.
 
-## Exmaple System Design
+## Example System Design
 
 ![Screenshot](./help-images/Transactional-Outbox-Pattern.webp)
