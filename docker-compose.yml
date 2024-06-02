@@ -173,7 +173,9 @@ services:
     volumes:
       - ./docker/alert-manager/email-alert.yml:/opt/bitnami/alertmanager/conf/config.yml
     depends_on:
-      - grafana
+      - prometheus
+    networks:
+      - prometheus
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
@@ -182,6 +184,8 @@ services:
       - 8025:8025
     depends_on:
       - alertmanager
+    networks:
+      - prometheus
 
 networks:
   postgres:
