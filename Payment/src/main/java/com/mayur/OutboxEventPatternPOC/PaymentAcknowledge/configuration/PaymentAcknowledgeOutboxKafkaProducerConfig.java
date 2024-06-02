@@ -1,6 +1,8 @@
 package com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.configuration;
 
-import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.request.LedgerRequest;
+import com.mayur.OutboxEventPatternPOC.schema.LedgerRequest;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,10 @@ public class PaymentAcknowledgeOutboxKafkaProducerConfig {
         //This ensures that the Kafka producer will send messages idempotently, preventing duplicate messages from being produced.
         configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        configProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        configProps.put(ProducerConfig.RETRIES_CONFIG, 5);
+        configProps.put(KafkaAvroSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 

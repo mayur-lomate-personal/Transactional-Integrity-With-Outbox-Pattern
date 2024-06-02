@@ -1,0 +1,53 @@
+global:
+  scrape_interval: 10s
+  scrape_timeout: 10s
+  evaluation_interval: 10s
+
+rule_files: ["rules/*.yml"]
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: postgres-exporter
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+
+  - job_name: payment
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - host.docker.internal:8091
+
+  - job_name: zookeeper
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: [ "zookeeper:9200"]
+
+  - job_name: kafka
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    scheme: http
+    static_configs:
+      - targets: [ "kafka-1:9200", "kafka-2:9200", "kafka-3:9200" ]
+
+  - job_name: kafka-schema-registry
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: [ "schema-registry:9200" ]
+
+alerting:
+  alertmanagers:
+    - timeout: "10s"
+      scheme: http
+      static_configs:
+        - targets: ["alertmanager:9093"]

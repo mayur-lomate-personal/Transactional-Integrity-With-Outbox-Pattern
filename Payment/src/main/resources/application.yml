@@ -15,10 +15,15 @@ spring:
     username: 'mayur'
     url: jdbc:postgresql://localhost:5432/payment
     password: 'mayur123'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "prometheus" ]
 com:
   mayur:
     OutboxEventPatternPOC:
       PaymentAcknowledge:
         LedgerRequest:
           kafka:
-            bootstrap-servers: localhost:9093
+            bootstrap-servers: localhost:9092,localhost:9093,localhost:9094

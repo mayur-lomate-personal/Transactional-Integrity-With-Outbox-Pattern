@@ -1,0 +1,26 @@
+{
+  "name": "LedgerRequest",
+  "namespace": "com.mayur.OutboxEventPatternPOC.schema",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "fromAccount",
+      "type": "string"
+    },
+    {
+      "name": "toAccount",
+      "type": "string"
+    },
+    {
+      "name": "transferredAmount",
+      "type": "double"
+    }
+  ]
+}

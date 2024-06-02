@@ -6,14 +6,18 @@ import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.model.PaymentAcknowled
 import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.model.PaymentTransaction;
 import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.repository.PaymentAcknowledgeOutboxEventRepo;
 import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.repository.PaymentTransactionRepo;
-import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.request.LedgerRequest;
 import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.request.PaymentAcknowledgeRequest;
+import com.mayur.OutboxEventPatternPOC.PaymentAcknowledge.util.AvroUtil;
+import com.mayur.OutboxEventPatternPOC.schema.LedgerRequest;
+import io.micrometer.core.annotation.Timed;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@Log4j2
 @Service
 public class PaymentAcknowledgeService {
 
@@ -26,6 +30,7 @@ public class PaymentAcknowledgeService {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Timed(value = "PaymentAcknowledgeService.acknowledgePayment", description = "Time taken to execute acknowledgePayment method")
     @Transactional
     public void acknowledgePayment(final PaymentAcknowledgeRequest paymentAcknowledgeRequest){
         PaymentTransaction paymentTransaction = paymentTransactionRepo.findByBankTransactionId(paymentAcknowledgeRequest.getTransactionId());
@@ -37,8 +42,11 @@ public class PaymentAcknowledgeService {
             paymentAcknowledgeOutboxEvent.setCreatedAt(LocalDateTime.now());
             paymentAcknowledgeOutboxEvent.setSent(false);
             try {
-                paymentAcknowledgeOutboxEvent.setPayload(objectMapper.writeValueAsString(new LedgerRequest(paymentTransaction.getId(), paymentTransaction.getFromAccount(), paymentTransaction.getToAccount(),paymentTransaction.getTransferredAmount())));
-            } catch (JsonProcessingException e) {
+                //paymentAcknowledgeOutboxEvent.setPayload(objectMapper.writeValueAsString(new LedgerRequest(paymentTransaction.getId(), paymentTransaction.getFromAccount(), paymentTransaction.getToAccount(),paymentTransaction.getTransferredAmount())));
+                LedgerRequest ledgerRequest = new LedgerRequest(paymentTransaction.getId(), paymentTransaction.getFromAccount(), paymentTransaction.getToAccount(),paymentTransaction.getTransferredAmount());
+                log.info("ledgerRequest in form of string : " + AvroUtil.serializeToString(ledgerRequest));
+                paymentAcknowledgeOutboxEvent.setPayload(AvroUtil.serializeToString(ledgerRequest));
+            } catch (RuntimeException e) {
                 throw new RuntimeException(e);
             }
             paymentAcknowledgeOutboxEventRepo.save(paymentAcknowledgeOutboxEvent);
