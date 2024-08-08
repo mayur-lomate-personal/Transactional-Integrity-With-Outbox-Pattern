@@ -1,16 +1,10 @@
 # POC of Outbox Event Pattern
 
-• This project illustrates the implementation of the Outbox Pattern
-in Spring Boot, showcasing how to ensure reliable event
-publishing with 99.9% reliability.
+• This project illustrates the implementation of the Outbox Pattern in Spring Boot, showcasing how to ensure reliable event publishing with 99.9% reliability.
 
-• By utilizing a Kafka cluster, the project achieves efficient, scalable,
-and fault-tolerant event streaming, improving throughput by up to
-70%.
+• By utilizing a Kafka cluster, the project achieves efficient, scalable, and fault-tolerant event streaming, improving throughput by up to 70%.
 
-• Prometheus and Grafana are employed forreal-time monitoring,
-providing comprehensive insights into system performance and
-operational health.
+• Prometheus and Grafana are employed for real-time monitoring, providing comprehensive insights into system performance and operational health.
 
 ## Outbox Event Pattern
 
