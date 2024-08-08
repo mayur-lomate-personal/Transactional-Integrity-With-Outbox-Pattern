@@ -1,6 +1,16 @@
 # POC of Outbox Event Pattern
 
-This project showcases the implementation of the Outbox Pattern in Spring Boot, demonstrating how to ensure reliable event publishing by storing event data in an Outbox table within the same database transaction as the primary data modification operations.
+• This project illustrates the implementation of the Outbox Pattern
+in Spring Boot, showcasing how to ensure reliable event
+publishing with 99.9% reliability.
+
+• By utilizing a Kafka cluster, the project achieves efficient, scalable,
+and fault-tolerant event streaming, improving throughput by up to
+70%.
+
+• Prometheus and Grafana are employed forreal-time monitoring,
+providing comprehensive insights into system performance and
+operational health.
 
 ## Outbox Event Pattern
 
@@ -14,7 +24,7 @@ Separately, a background process (e.g., a scheduler, a dedicated service) reads 
 
 By using the Outbox event pattern, developers can achieve consistency and reliability in event-driven systems, enabling seamless integration between different components and ensuring data integrity across distributed environments.
 
-## Exmaple System Design
+## Example System Design
 
 ![Screenshot](./help-images/Transactional-Outbox-Pattern.webp)
 
